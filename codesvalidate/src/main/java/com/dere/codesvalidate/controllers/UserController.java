@@ -1,5 +1,6 @@
 package com.dere.codesvalidate.controllers;
 
+import com.dere.codesvalidate.models.Configuration;
 import com.dere.codesvalidate.models.User;
 import com.dere.codesvalidate.repository.CodeRepository;
 import com.dere.codesvalidate.repository.UserRepository;
@@ -63,10 +64,12 @@ public class UserController {
 
     @RequestMapping(path = "/user", method = RequestMethod.PUT)
     public ResponseEntity<?> addCodesToUser(@Valid @RequestBody User user){
+        Configuration configuration = new Configuration();
+        configuration.setPointValue(1);
         try{
             if(userRepository.existsById(user.getUserId())){
-                List<String> codesList = Stream.of(user.getCodes(), userRepository.findById(user.getUserId()).get().getCodes()).flatMap(Collection::stream).collect(Collectors.toList());
-                user.setCodes(codesList);
+                Long userPoint  = userRepository.findById(user.getUserId()).get().getPoints();
+                user.setPoints(userPoint*configuration.getPointValue());
                 userRepository.save(user);
                 return ResponseEntity.ok("Update successful");
             }
@@ -77,12 +80,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/getUserPoint", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserPoint(@Valid @RequestBody User user){
+    @RequestMapping(path = "/getUserPoint/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserPoint(@PathVariable String userId){
         try {
-            int codes = userRepository.findById(user.getUserId()).get().getCodes().size();
-            int codeValue = codeRepository.findAll().get(0).getPointValue();
-            return ResponseEntity.ok(codes*codeValue);
+            long codes = userRepository.findById(userId).get().getPoints();
+            //int codeValue = codeRepository.findAll().get(0).getPointValue();
+            return ResponseEntity.ok(codes);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

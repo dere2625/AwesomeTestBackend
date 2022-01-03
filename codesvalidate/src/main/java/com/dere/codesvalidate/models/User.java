@@ -16,18 +16,18 @@ public class User {
         this.userId = userId;
     }
 
-    public List<String> getCodes() {
-        return codes;
+    public Long getPoints() {
+        return points;
     }
 
-    public void setCodes(List<String> codes) {
-        this.codes = codes;
+    public void setPoints(Long points) {
+        this.points = points;
     }
 
     @NotNull(message = "User Id cannot be null")
     @Id
     private String userId;
-    private List<String> codes;
+    private Long points;
 
     public User(){
 

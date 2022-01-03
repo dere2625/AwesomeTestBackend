@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -25,6 +27,17 @@ public class CodesvalidateApplication {
 				.apis(RequestHandlerSelectors.basePackage("com.dere.codesvalidate"))
 				.paths(PathSelectors.any())
 				.build();
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/codes").allowedOrigins("https://localhost:44317");
+				registry.addMapping("codes/callToAction/").allowedOrigins("https://localhost:44317");
+			}
+		};
 	}
 
 	public static void main(String[] args) {

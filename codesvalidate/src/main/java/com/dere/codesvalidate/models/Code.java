@@ -22,19 +22,10 @@ public class Code {
         isUsed = used;
     }
 
-    public int getPointValue() {
-        return pointValue;
-    }
-
-    public void setPointValue(int pointValue) {
-        this.pointValue = pointValue;
-    }
-
     @Id
     @Length(min = 5, max = 5, message = "Invalid code Length")
     private String code;
     private boolean isUsed;
-    private int pointValue;
 
     public Code(){
 
